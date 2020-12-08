@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 
 namespace ModernWinver
 {
@@ -24,25 +26,84 @@ namespace ModernWinver
     {
         public MainWindow()
         {
+
             InitializeComponent();
             DateTime current = DateTime.Now;
+            string ValuesPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            bool UpToDate = true;
+            string JsonList = "";
+            Values vals = new Values();
 
-            valueCopyright.Content = "© " + current.Year + " Microsoft Corporation. All rights reserved.";
-            
-            valueEdition.Content = ExecuteCommandSync("powershell \"Get-WmiObject -Class Win32_OperatingSystem | % Caption\"").Replace("Microsoft ", "");
-            valueVersion.Content = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % ReleaseId\"");
-            valueBuild.Content = (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % CurrentBuild\"") + "." + ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % UBR\"")).Replace("\n", "").Replace("\r", "");
-            valueUser.Content = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOwner\"");
-            if (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"").Replace("\n", "").Replace("\r", "") == "")
+            if (!File.Exists(System.IO.Path.Combine(ValuesPath, "winver.json")))
             {
-                labelWorkgroup.Content = "Computer";
-                valueWorkgroup.Content = ExecuteCommandSync("hostname");
+                File.Create(System.IO.Path.Combine(ValuesPath, "winver.json")).Close();
+                UpToDate = false;
             }
             else
             {
-                valueWorkgroup.Content = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"");
+                JsonList = File.ReadAllText(System.IO.Path.Combine(ValuesPath, "winver.json"));
+                if (JsonList == "")
+                {
+                    UpToDate = false;
+                }
+                else
+                {
+                    vals = JsonConvert.DeserializeObject<Values>(JsonList);
+                    if (vals.Month != current.Month)
+                    {
+                        UpToDate = false;
+                    }
+                }
             }
+
+            if (UpToDate == false)
+            {
+                vals.Month = current.Month;
+                vals.CopyrightYear = current.Year.ToString();
+                vals.Edition = ExecuteCommandSync("powershell \"Get-WmiObject -Class Win32_OperatingSystem | % Caption\"").Replace("Microsoft ", "").Replace("\r\n", "");
+                vals.Version = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % ReleaseId\"").Replace("\r\n", "");
+                vals.Build = (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % CurrentBuild\"") + "." + ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % UBR\"")).Replace("\r\n", "");
+                vals.User = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOwner\"").Replace("\r\n", "");
+                if (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"").Replace("\r\n", "") == "")
+                {
+                    vals.IsLocal = true;
+                    vals.Workgroup = ExecuteCommandSync("hostname").Replace("\r\n", "");
+                }
+                else
+                {
+                    vals.IsLocal = false;
+                    vals.Workgroup = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"").Replace("\r\n", "");
+                }
+                File.Create(System.IO.Path.Combine(ValuesPath, "winver.json")).Close();
+                File.WriteAllText(System.IO.Path.Combine(ValuesPath, "winver.json"), JsonConvert.SerializeObject(vals, Formatting.Indented));
+            }
+
+            if (vals.IsLocal)
+            {
+                labelWorkgroup.Content = "Computer";
+            }
+
+            valueCopyright.Content = "© " + vals.CopyrightYear + " Microsoft Corporation. All rights reserved.";
+            valueEdition.Content = vals.Edition;
+            valueVersion.Content = vals.Version;
+            valueBuild.Content = vals.Build;
+            valueUser.Content = vals.User;
+            valueWorkgroup.Content = vals.Workgroup;
+
+
             Show();
+        }
+
+        struct Values
+        {
+            public int Month;
+            public string CopyrightYear;
+            public string Edition;
+            public string Version;
+            public string Build;
+            public string User;
+            public bool IsLocal;
+            public string Workgroup;
         }
 
         public string ExecuteCommandSync(object command)
