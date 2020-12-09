@@ -1,0 +1,40 @@
+﻿<Page x:Class="ModernWinver.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ModernWinver"
+      mc:Ignorable="d"
+      Title="AboutPage" d:DesignWidth="436" d:DesignHeight="400">
+
+    <Grid>
+        <!-- Static labels -->
+        <Label x:Name="labelTitle" Content="Microsoft Windows" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelEdition" Content="Edition" HorizontalAlignment="Left" Margin="13,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelVersion" Content="Version" HorizontalAlignment="Left" Margin="13,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelBuild" Content="OS Build" HorizontalAlignment="Left" Margin="13,124,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelUser" Content="Username" HorizontalAlignment="Left" Margin="13,345,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelWorkgroup" Content="Workgroup" HorizontalAlignment="Left" Margin="13,369,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+
+        <TextBlock x:Name="BodyText" Margin="13,208,11,0" Height="133" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}" FontSize="14" AllowDrop="True" TextWrapping="WrapWithOverflow">
+             The Windows 10 operating system and its user interface are protected by trademark and other pending or existing intellectual property rights in the United States and other countries/regions.<LineBreak/><LineBreak/>This product is licensed under the 
+            <Hyperlink 
+            TextDecorations=""
+            NavigateUri="https://www.microsoft.com/useterms"
+            RequestNavigate="Hyperlink_RequestNavigate">
+        Microsoft Software Licence Terms
+    </Hyperlink> to:
+        </TextBlock>
+
+        <!-- Buttons -->
+        <Button x:Name="buttonLaunchSettings" Content="See More" HorizontalAlignment="Left" Margin="13,160,0,0" VerticalAlignment="Top" Width="84" Foreground="{DynamicResource SystemBaseHighColorBrush}" Click="buttonLaunchSettings_Click"/>
+
+        <!-- Value labels -->
+        <Label x:Name="valueCopyright" Content="© 0000 Microsoft Corporation. All rights reserved." Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="valueEdition" Content="Windows 10 Unknown" HorizontalAlignment="Left" Margin="135,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueVersion" Content="0000" HorizontalAlignment="Left" Margin="135,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueBuild" Content="00000.0" HorizontalAlignment="Left" Margin="135,124,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueUser" Content="Username" HorizontalAlignment="Left" Margin="135,349,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueWorkgroup" Content="Workgroup" HorizontalAlignment="Left" Margin="135,373,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+    </Grid>
+</Page>

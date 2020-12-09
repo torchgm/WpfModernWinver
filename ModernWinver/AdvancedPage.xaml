@@ -1,0 +1,14 @@
+﻿<Page x:Class="ModernWinver.AdvancedPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ModernWinver"
+      mc:Ignorable="d" 
+      Title="AdvancedPage" d:DesignWidth="436" d:DesignHeight="400">
+
+    <Grid>
+        <Label x:Name="labelTitle" Content="Advanced Information" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelDebug" Content="Unknown text" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+    </Grid>
+</Page>
