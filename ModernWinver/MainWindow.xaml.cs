@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Management;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -16,6 +17,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace ModernWinver
 {
@@ -49,7 +51,7 @@ namespace ModernWinver
                 else
                 {
                     vals = JsonConvert.DeserializeObject<Values>(JsonList);
-                    if (vals.Month != current.Month)
+                    if (vals.WeekOfYear != current.DayOfYear / 7  || vals.WeekOfYear != -1)
                     {
                         UpToDate = false;
                     }
@@ -58,13 +60,38 @@ namespace ModernWinver
 
             if (UpToDate == false)
             {
-                vals.Month = current.Month;
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+                vals.WeekOfYear = current.DayOfYear / 7;
                 vals.CopyrightYear = current.Year.ToString();
-                vals.Edition = ExecuteCommandSync("powershell \"Get-WmiObject -Class Win32_OperatingSystem | % Caption\"").Replace("Microsoft ", "").Replace("\r\n", "");
-                vals.Version = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % ReleaseId\"").Replace("\r\n", "");
-                vals.Build = (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % CurrentBuild\"") + "." + ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % UBR\"")).Replace("\r\n", "");
-                vals.User = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOwner\"").Replace("\r\n", "");
-                if (ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"").Replace("\r\n", "") == "")
+                
+                // Get edition of Windows 10 because apparently that's bloody impossible any other way and the registry returns me wrong values
+                try
+                {
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_OperatingSystem");
+
+                    foreach (ManagementObject queryObj in searcher.Get())
+                    {
+                        vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "");
+                    }
+                }
+                catch (ManagementException e)
+                {
+                    MessageBox.Show("An error occurred while querying for WMI data: " + e.Message);
+                }
+                
+                // These three are simple, just getting from the registry like a normal person
+                vals.Version = (string)key.GetValue("ReleaseId");
+                vals.Build = (string)key.GetValue("CurrentBuild") + "." + key.GetValue("UBR").ToString();
+                vals.User = (string)key.GetValue("RegisteredOwner");
+                
+                // This just prevents you from having a blank username
+                if (vals.User == "" || vals.User == "user name")
+                {
+                    vals.User = "(Unknown user)";
+                }
+
+                // If in org, show org name, else show hostname
+                if ((string)key.GetValue("RegisteredOrganization") == "")
                 {
                     vals.IsLocal = true;
                     vals.Workgroup = ExecuteCommandSync("hostname").Replace("\r\n", "");
@@ -72,17 +99,22 @@ namespace ModernWinver
                 else
                 {
                     vals.IsLocal = false;
-                    vals.Workgroup = ExecuteCommandSync("powershell \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion' | % RegisteredOrganization\"").Replace("\r\n", "");
+                    vals.Workgroup = (string)key.GetValue("RegisteredOrganization");
                 }
                 File.Create(System.IO.Path.Combine(ValuesPath, "winver.json")).Close();
                 File.WriteAllText(System.IO.Path.Combine(ValuesPath, "winver.json"), JsonConvert.SerializeObject(vals, Formatting.Indented));
+
+
             }
 
+            // Switches over the label from Workgroup to Computer if local
             if (vals.IsLocal)
             {
                 labelWorkgroup.Content = "Computer";
             }
 
+
+            // Actually sets all the labels
             valueCopyright.Content = "© " + vals.CopyrightYear + " Microsoft Corporation. All rights reserved.";
             valueEdition.Content = vals.Edition;
             valueVersion.Content = vals.Version;
@@ -90,13 +122,13 @@ namespace ModernWinver
             valueUser.Content = vals.User;
             valueWorkgroup.Content = vals.Workgroup;
 
-
+            // Shows the window
             Show();
         }
 
         struct Values
         {
-            public int Month;
+            public int WeekOfYear;
             public string CopyrightYear;
             public string Edition;
             public string Version;
