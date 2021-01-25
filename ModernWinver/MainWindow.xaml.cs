@@ -390,8 +390,14 @@ namespace ModernWinver
             LoadedSystemPage = new SystemPage();
             LoadedThemePage = new ThemePage();
             LoadedAdvancedPage = new AdvancedPage();
-            ContentFrame.Navigate(LoadedAboutPage);
-            NavView.SelectedItem = NavView.MenuItems[0];
+            try
+            {
+                ContentFrame.Navigate(LoadedAboutPage);
+                NavView.SelectedItem = NavView.MenuItems[0];
+            }
+            catch (NullReferenceException)
+            {
+            }
             //refreshProgress.IsActive = false;
         }
     }
