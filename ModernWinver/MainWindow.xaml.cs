@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using Microsoft.Win32;
 using ModernWpf.Controls;
@@ -29,13 +30,57 @@ namespace ModernWinver
     {
         AboutPage LoadedAboutPage;
         SystemPage LoadedSystemPage;
+        ThemePage LoadedThemePage;
         AdvancedPage LoadedAdvancedPage;
+        public Values vals = new Values();
+        DateTime current = DateTime.Now;
+        string ValuesPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "winver.json");
+        bool UpToDate = true;
+
         public MainWindow()
         {
 
-            LoadedAboutPage = new AboutPage();
-            LoadedSystemPage = new SystemPage();
-            LoadedAdvancedPage = new AdvancedPage();
+            if (!File.Exists(ValuesPath))
+            {
+                File.Create(ValuesPath).Close();
+                UpToDate = false;
+            }
+            else
+            {
+                string JsonList = File.ReadAllText(ValuesPath);
+                
+                if (JsonList == "")
+                {
+                    UpToDate = false;
+                }
+                else
+                {
+                    vals = JsonConvert.DeserializeObject<Values>(JsonList);
+                    double check = current.DayOfYear / 7;
+                    int checkInt = Convert.ToInt32(Math.Round(check));
+                    if (vals.WeekOfYear != checkInt || vals.WeekOfYear == -1 || vals.RAMSpeed == null)
+                    {
+                        UpToDate = false;
+                    }
+                }
+            }
+
+            // ////////////////////////////// //
+            // Gets new values for everything //
+            // ////////////////////////////// //
+            if (UpToDate == false)
+            {
+                buttonRefresh_Click(null, null);
+
+            }
+            else
+            {
+                LoadedAboutPage = new AboutPage();
+                LoadedSystemPage = new SystemPage();
+                LoadedThemePage = new ThemePage();
+                LoadedAdvancedPage = new AdvancedPage();
+            }
+            
             InitializeComponent();
         }
 
@@ -59,10 +104,12 @@ namespace ModernWinver
             NavView.SelectedItem = NavView.MenuItems[0];
             ContentFrame.Navigate(LoadedAboutPage);
         }
+
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
+                // Unused atm because NavigationView hates me
                 Process.Start("ms-settings:");
                 Close();
             }
@@ -80,6 +127,10 @@ namespace ModernWinver
                             ContentFrame.Navigate(LoadedSystemPage);
                             break;
 
+                        case "ThemePage":
+                            ContentFrame.Navigate(LoadedThemePage);
+                            break;
+
                         case "AdvancedPage":
                             ContentFrame.Navigate(LoadedAdvancedPage);
 
@@ -87,6 +138,34 @@ namespace ModernWinver
                     }
                 }
             }
+        }
+
+        public struct Values
+        {
+            public int WeekOfYear;
+            public string CopyrightYear;
+            public string Edition;
+            public string Version;
+            public string Build;
+            public string User;
+            public bool IsLocal;
+            public string SystemName;
+            public string Workgroup;
+            
+            public string CPU;
+            public string Arch;
+            public double RAM;
+            public string RAMType;
+            public string RAMSpeed;
+            public string Path;
+            public double Storage;
+            public double FreeSpace;
+
+        }
+
+        static int GetTotalMemoryInGibibytes()
+        {
+            return Convert.ToInt32(new ComputerInfo().TotalPhysicalMemory / 1073741824) + 1;
         }
 
         public string ExecuteCommandSync(object command)
@@ -120,6 +199,200 @@ namespace ModernWinver
                 // Log the exception
                 return e.ToString();
             }
+        }
+
+        private long GetTotalFreeSpace()
+        {
+            long tfs = 0;
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (drive.IsReady)
+                {
+                    tfs = tfs + drive.TotalFreeSpace / 1073741824;
+                }
+            }
+            return tfs;
+        }
+
+        private long GetTotalSpace()
+        {
+            long tfs = 0;
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (drive.IsReady)
+                {
+                    tfs = tfs + drive.TotalSize / 1073741824;
+                }
+            }
+            return tfs;
+        }
+
+        // Magically absorbs different types of RAM
+        public static string RamType()
+        {
+                int type = 0;
+
+                ConnectionOptions connection = new ConnectionOptions();
+                connection.Impersonation = ImpersonationLevel.Impersonate;
+                ManagementScope scope = new ManagementScope("\\\\.\\root\\CIMV2", connection);
+                scope.Connect();
+                ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_PhysicalMemory");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+                foreach (ManagementObject queryObj in searcher.Get())
+                {
+                    type = Convert.ToInt32(queryObj["MemoryType"]);
+                }
+
+                return TypeString(type);
+        }
+
+        // Details different types of RAM
+        private static string TypeString(int type)
+        {
+            string outValue;
+            switch (type)
+            {
+                case 0x0: outValue = "Probably DDR4"; break;
+                case 0x1: outValue = "Other"; break;
+                case 0x2: outValue = "DRAM"; break;
+                case 0x3: outValue = "Synchronous DRAM"; break;
+                case 0x4: outValue = "Cache DRAM"; break;
+                case 0x5: outValue = "EDO"; break;
+                case 0x6: outValue = "EDRAM"; break;
+                case 0x7: outValue = "VRAM"; break;
+                case 0x8: outValue = "SRAM"; break;
+                case 0x9: outValue = "RAM"; break;
+                case 0xa: outValue = "ROM"; break;
+                case 0xb: outValue = "Flash"; break;
+                case 0xc: outValue = "EEPROM"; break;
+                case 0xd: outValue = "FEPROM"; break;
+                case 0xe: outValue = "EPROM"; break;
+                case 0xf: outValue = "CDRAM"; break;
+                case 0x10: outValue = "3DRAM"; break;
+                case 0x11: outValue = "SDRAM"; break;
+                case 0x12: outValue = "SGRAM"; break;
+                case 0x13: outValue = "RDRAM"; break;
+                case 0x14: outValue = "DDR"; break;
+                case 0x15: outValue = "DDR2"; break;
+                case 0x16: outValue = "DDR2 FB-DIMM"; break;
+                case 0x17: outValue = "Undefined 23"; break;
+                case 0x18: outValue = "DDR3"; break;
+                case 0x19: outValue = "FBD2"; break;
+                case 0x1a: outValue = "DDR4"; break;
+                default: outValue = "Undefined"; break;
+            }
+
+            return outValue;
+        }
+
+        public static string SysInfo(string loc, string request)
+        {
+            string info = "";
+
+            ConnectionOptions connection = new ConnectionOptions();
+            connection.Impersonation = ImpersonationLevel.Impersonate;
+            ManagementScope scope = new ManagementScope("\\\\.\\root\\CIMV2", connection);
+            scope.Connect();
+            ObjectQuery query = new ObjectQuery("SELECT * FROM " + loc);
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
+            foreach (ManagementObject queryObj in searcher.Get())
+            {
+                info = queryObj[request].ToString();
+            }
+            return info;
+        }
+
+        private void buttonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            refreshProgress.IsActive = true;
+            RegistryKey CurrentVersionKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+            RegistryKey CentralProcessorKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+
+            // Easy stuff
+            vals.WeekOfYear = current.DayOfYear / 7;
+            vals.CopyrightYear = current.Year.ToString();
+            vals.Version = (string)CurrentVersionKey.GetValue("ReleaseId");
+            if (vals.Version == "2009")
+            {
+                vals.Version = "20H2";
+            }
+            vals.Build = (string)CurrentVersionKey.GetValue("CurrentBuild") + "." + CurrentVersionKey.GetValue("UBR").ToString();
+            vals.User = (string)CurrentVersionKey.GetValue("RegisteredOwner");
+            vals.SystemName = ExecuteCommandSync("hostname").Replace("\r\n", "");
+            vals.Workgroup = (string)CurrentVersionKey.GetValue("RegisteredOrganization");
+            vals.CPU = (string)CentralProcessorKey.GetValue("ProcessorNameString");
+            vals.Arch = SysInfo("Win32_Processor", "Architecture");
+            vals.RAM = GetTotalMemoryInGibibytes();
+            vals.RAMType = RamType();
+            vals.RAMSpeed = SysInfo("Win32_PhysicalMemory", "Speed");
+            vals.Path = @"C:\Windows";  //(string)CurrentVersionKey.GetValue("PathName");
+            vals.FreeSpace = GetTotalFreeSpace();
+            vals.Storage = GetTotalSpace();
+
+            switch (SysInfo("Win32_Processor", "Architecture"))
+            {
+                case "0":
+                    vals.Arch = "x86"; break;
+                case "1":
+                    vals.Arch = "MIPS"; break;
+                case "2":
+                    vals.Arch = "Alpha"; break;
+                case "3":
+                    vals.Arch = "PowerPC"; break;
+                case "5":
+                    vals.Arch = "ARM"; break;
+                case "6":
+                    vals.Arch = "ia64"; break;
+                case "9":
+                    vals.Arch = "AMD64"; break;
+                default:
+                    vals.Arch = "Real"; break;
+            }
+
+
+            // Get edition of Windows 10 because apparently that's bloody impossible any other way and the registry returns me wrong values
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_OperatingSystem");
+
+                foreach (ManagementObject queryObj in searcher.Get())
+                {
+                    vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "").Replace("Insider Preview", "");
+                }
+            }
+            catch (ManagementException ex)
+            {
+                MessageBox.Show("An error occurred while querying for WMI data: " + ex.Message);
+            }
+
+            // This just prevents you from having a blank username
+            if (vals.User == "" || vals.User == "user name")
+            {
+                vals.User = "(Unknown user)";
+            }
+
+            // If in org, show org name, else show hostname
+            if (vals.Workgroup == "" || vals.Workgroup == "org name")
+            {
+                vals.IsLocal = true;
+            }
+            else
+            {
+                vals.IsLocal = false;
+            }
+
+            // Writes files
+            File.Create(ValuesPath).Close();
+            File.WriteAllText(ValuesPath, JsonConvert.SerializeObject(vals, Formatting.Indented));
+
+            // Reloads pages
+            LoadedAboutPage = new AboutPage();
+            LoadedSystemPage = new SystemPage();
+            LoadedThemePage = new ThemePage();
+            LoadedAdvancedPage = new AdvancedPage();
+            ContentFrame.Navigate(LoadedAboutPage);
+            NavView.SelectedItem = NavView.MenuItems[0];
+            refreshProgress.IsActive = false;
         }
     }
 }
