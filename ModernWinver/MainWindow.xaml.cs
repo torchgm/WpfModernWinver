@@ -304,7 +304,7 @@ namespace ModernWinver
 
         private void buttonRefresh_Click(object sender, RoutedEventArgs e)
         {
-            refreshProgress.IsActive = true;
+            //refreshProgress.IsActive = true;
             RegistryKey CurrentVersionKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
             RegistryKey CentralProcessorKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
 
@@ -392,7 +392,7 @@ namespace ModernWinver
             LoadedAdvancedPage = new AdvancedPage();
             ContentFrame.Navigate(LoadedAboutPage);
             NavView.SelectedItem = NavView.MenuItems[0];
-            refreshProgress.IsActive = false;
+            //refreshProgress.IsActive = false;
         }
     }
 }
