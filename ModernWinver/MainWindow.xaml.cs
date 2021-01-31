@@ -82,6 +82,7 @@ namespace ModernWinver
             }
             
             InitializeComponent();
+
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)
@@ -297,7 +298,14 @@ namespace ModernWinver
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
             foreach (ManagementObject queryObj in searcher.Get())
             {
-                info = queryObj[request].ToString();
+                if (queryObj[request] != null)
+                {
+                    info = queryObj[request].ToString();
+                }
+                else
+                {
+                    info = "[Unknown]";
+                }
             }
             return info;
         }
@@ -357,7 +365,13 @@ namespace ModernWinver
 
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
-                    vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "").Replace("Insider Preview", "");
+                    vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "");
+                    if (vals.Edition.Contains("Insider Preview"))
+                    {
+                        vals.Version = "vNext";
+                    }
+                    vals.Edition = vals.Edition.Replace("Insider Preview", "");
+
                 }
             }
             catch (ManagementException ex)
@@ -390,13 +404,10 @@ namespace ModernWinver
             LoadedSystemPage = new SystemPage();
             LoadedThemePage = new ThemePage();
             LoadedAdvancedPage = new AdvancedPage();
-            try
+            if (ContentFrame != null)
             {
                 ContentFrame.Navigate(LoadedAboutPage);
                 NavView.SelectedItem = NavView.MenuItems[0];
-            }
-            catch (NullReferenceException)
-            {
             }
             //refreshProgress.IsActive = false;
         }

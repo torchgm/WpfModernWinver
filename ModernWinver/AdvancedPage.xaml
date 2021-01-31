@@ -9,6 +9,6 @@
 
     <Grid>
         <Label x:Name="labelTitle" Content="Advanced Information" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
-        <Label x:Name="labelDebug" Content="Unknown text" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="labelDebug" Content="Unknown text" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </Page>

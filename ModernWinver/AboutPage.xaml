@@ -30,11 +30,11 @@
         <Button x:Name="buttonLaunchSettings" Content="See More" HorizontalAlignment="Left" Margin="13,160,0,0" VerticalAlignment="Top" Width="84" Foreground="{DynamicResource SystemBaseHighColorBrush}" Click="buttonLaunchSettings_Click"/>
 
         <!-- Value labels -->
-        <Label x:Name="valueCopyright" Content="© 0000 Microsoft Corporation. All rights reserved." Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <Label x:Name="valueEdition" Content="Windows 10 Unknown" HorizontalAlignment="Left" Margin="120,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueVersion" Content="0000" HorizontalAlignment="Left" Margin="120,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueBuild" Content="00000.0" HorizontalAlignment="Left" Margin="120,124,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueUser" Content="Username" HorizontalAlignment="Left" Margin="120,349,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueWorkgroup" Content="Workgroup" HorizontalAlignment="Left" Margin="120,373,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueCopyright" Content="© 0000 Microsoft Corporation. All rights reserved." Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="valueEdition" Content="Windows 10 Unknown" HorizontalAlignment="Left" Margin="120,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueVersion" Content="0000" HorizontalAlignment="Left" Margin="120,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueBuild" Content="00000.0" HorizontalAlignment="Left" Margin="120,124,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueUser" Content="Username" HorizontalAlignment="Left" Margin="120,349,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueWorkgroup" Content="Workgroup" HorizontalAlignment="Left" Margin="120,373,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
     </Grid>
 </Page>

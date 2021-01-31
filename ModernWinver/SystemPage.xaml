@@ -10,7 +10,7 @@
 
     <Grid>
         <Label x:Name="labelTitle" Content="Your PC" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
-        <Label x:Name="valueSystemName" Content="SystemName" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="valueSystemName" Content="SystemName" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <Label x:Name="labelCPU" Content="Processor" HorizontalAlignment="Left" Margin="13,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
         <Label x:Name="labelArch" Content="Architecture" HorizontalAlignment="Left" Margin="13,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
         <Label x:Name="labelRAM" Content="Installed RAM" HorizontalAlignment="Left" Margin="13,286,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
@@ -18,20 +18,20 @@
         <Label x:Name="labelStorage" Content="Total storage" HorizontalAlignment="Left" Margin="13,181,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
 
 
-        <Label x:Name="valueCPU" Content="UnknownProcessor0000 @ 0.00GHz" HorizontalAlignment="Left" Margin="130,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueArch" Content="Unknown (REAL__MODE)" HorizontalAlignment="Left" Margin="130,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valueRAM" Content="0 GB Unknown @ 0000 MT/s" HorizontalAlignment="Left" Margin="130,286,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
-        <Label x:Name="valuePath" Content="C:\Windows" HorizontalAlignment="Left" Margin="130,205,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}"/>
+        <Label x:Name="valueCPU" Content="UnknownProcessor0000 @ 0.00GHz" HorizontalAlignment="Left" Margin="130,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueArch" Content="Unknown (REAL__MODE)" HorizontalAlignment="Left" Margin="130,100,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valueRAM" Content="0 GB Unknown @ 0000 MT/s" HorizontalAlignment="Left" Margin="130,286,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
+        <Label x:Name="valuePath" Content="C:\Windows" HorizontalAlignment="Left" Margin="130,205,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}"/>
         <ui:ProgressBar x:Name="progressStorage" Height="4" Margin="13,238,13,158" Value="0"/>
-        <Label x:Name="valueTotalStorage" Content="0 GB" HorizontalAlignment="Left" Margin="130,181,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Width="293"/>
-        <Label x:Name="valueStorage" Content="0 GB used" HorizontalAlignment="Left" Margin="13,247,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Width="191"/>
-        <Label x:Name="valueFreeStorage" Content="0 GB free" HorizontalAlignment="Left" Margin="204,247,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
+        <Label x:Name="valueTotalStorage" Content="0 GB" HorizontalAlignment="Left" Margin="130,181,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Width="293"/>
+        <Label x:Name="valueStorage" Content="0 GB used" HorizontalAlignment="Left" Margin="13,247,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Width="191"/>
+        <Label x:Name="valueFreeStorage" Content="0 GB free" HorizontalAlignment="Left" Margin="204,247,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
         <ui:ProgressBar x:Name="progressRAM" Height="4" Margin="13,319,13,77" Value="0"/>
-        <Label x:Name="valueZeroRAM" Content="0 GB" HorizontalAlignment="Left" Margin="13,328,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Width="191"/>
-        <Label x:Name="valueMaxRAM" Content="0 GB" HorizontalAlignment="Left" Margin="204,328,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
+        <Label x:Name="valueZeroRAM" Content="0 GB" HorizontalAlignment="Left" Margin="13,328,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Width="191"/>
+        <Label x:Name="valueMaxRAM" Content="0 GB" HorizontalAlignment="Left" Margin="204,328,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
         <ui:ProgressBar x:Name="progressCPU" Height="4" Margin="13,133,13,263" Value="0"/>
-        <Label x:Name="labelZeroCPU" Content="0%" HorizontalAlignment="Left" Margin="13,142,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Width="191"/>
-        <Label x:Name="labelMaxCPU" Content="100%" HorizontalAlignment="Left" Margin="204,142,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
+        <Label x:Name="labelZeroCPU" Content="0%" HorizontalAlignment="Left" Margin="13,142,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Width="191"/>
+        <Label x:Name="labelMaxCPU" Content="100%" HorizontalAlignment="Left" Margin="204,142,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseMediumColorBrush}" HorizontalContentAlignment="Right" Width="219"/>
 
     </Grid>
 </Page>

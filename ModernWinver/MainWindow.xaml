@@ -33,7 +33,7 @@
                 <ui:NavigationViewItem Tag="SystemPage">
                     <TextBlock Tag="SystemPage">System</TextBlock>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Tag="ThemePage" Visibility="Hidden">
+                <ui:NavigationViewItem Tag="ThemePage" Visibility="Visible">
                     <TextBlock Tag="ThemePage">Theme</TextBlock>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Tag="AdvancedPage" Visibility="Hidden">

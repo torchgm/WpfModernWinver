@@ -5,13 +5,38 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="http://schemas.modernwpf.com/2019"
       xmlns:local="clr-namespace:ModernWinver"
+      xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       Title="ThemePage" d:DesignWidth="436" d:DesignHeight="400">
 
     <Grid>
         <Label x:Name="labelTitle" Content="Themes and Colours" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
-        <Label x:Name="valueCurrentTheme" Content="Current Theme: Default" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumLowColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        
+        <Label x:Name="valueCurrentTheme" Content="Current Theme: Default" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Rectangle x:Name="wallpaperRectangle" RadiusX="7" RadiusY="7" HorizontalAlignment="Stretch" Margin="13,107,174,0" VerticalAlignment="Top" Height="138">
+            <Rectangle.Fill>
+                <ImageBrush x:Name="valueWallpaper" Stretch="UniformToFill"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Label x:Name="labelWallpaper" Content="Wallpaper" HorizontalAlignment="Left" Margin="13,76,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Button x:Name="buttonOpen" Content="Open original" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="288,133,0,0" VerticalAlignment="Top" Width="136" Click="buttonOpen_Click"/>
+        <Button x:Name="buttonPersonalisation" Content="Change in Settings" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="288,185,0,0" VerticalAlignment="Top" Width="136" Click="buttonPersonalisation_Click"/>
+
+
+        <Rectangle Fill="{DynamicResource SystemControlBackgroundAccentBrush}" HorizontalAlignment="Left" RadiusX="4" RadiusY="4" Height="32" Width="32" Margin="227,261,0,0" Stroke="{DynamicResource SystemBaseMediumColorBrush}" VerticalAlignment="Top" />
+        <Label x:Name="labelPrimaryAccent" Content="Primary accent colour" HorizontalAlignment="Left" Margin="13,267,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <!--<TextBox x:Name="textBoxPrimaryAccent" HorizontalAlignment="Left" Height="23" Margin="264,281,0,0" TextWrapping="Wrap" Text="#0078D7" VerticalAlignment="Top" Width="80"/>-->
+        <Button x:Name="buttonUpdatePrimaryAccent" Content="Update in Settings" HorizontalAlignment="Left" Margin="264,261,0,0" VerticalAlignment="Top" Width="160" Height="32" Click="buttonUpdatePrimaryAccent_Click"/>
+        <Rectangle HorizontalAlignment="Left" RadiusX="4" RadiusY="4" Height="32" Width="32" Margin="227,313,0,0" Stroke="{DynamicResource SystemBaseMediumColorBrush}" VerticalAlignment="Top" >
+            <Rectangle.Fill>
+                <SolidColorBrush x:Name="secondaryRectColour"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Label x:Name="labelSecondaryAccent" Content="Secondary accent colour" HorizontalAlignment="Left" Margin="13,319,0,0" VerticalAlignment="Top" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <TextBox x:Name="textBoxSecondaryAccent" HorizontalAlignment="Left" Height="23" Margin="264,313,0,0" TextWrapping="Wrap" Text="#??????
+                 " VerticalAlignment="Top" Width="80"/>
+        <Button x:Name="buttonUpdateSecondaryAccent" Content="Update" HorizontalAlignment="Left" Margin="349,313,0,0" VerticalAlignment="Top" Width="75" Height="32" Click="buttonUpdateSecondaryAccent_Click" />
+        <Label x:Name="labelResetNote" Content="Changes will take effect after you sign out and back in." Margin="13,355,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="labelResetNote2" Content="Windows may hang briefly when updating. Shift+click to reset." Margin="13,374,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
     </Grid>
 </Page>
