@@ -319,10 +319,14 @@ namespace ModernWinver
             // Easy stuff
             vals.WeekOfYear = current.DayOfYear / 7;
             vals.CopyrightYear = current.Year.ToString();
-            vals.Version = (string)CurrentVersionKey.GetValue("ReleaseId");
-            if (vals.Version == "2009")
+            vals.Version = (string)CurrentVersionKey.GetValue("DisplayVersion");
+            if (vals.Version == "")
             {
-                vals.Version = "20H2";
+                vals.Version = (string)CurrentVersionKey.GetValue("ReleaseId");
+                if (vals.Version == "2009")
+                {
+                    vals.Version = "20H2";
+                }
             }
             vals.Build = (string)CurrentVersionKey.GetValue("CurrentBuild") + "." + CurrentVersionKey.GetValue("UBR").ToString();
             vals.User = (string)CurrentVersionKey.GetValue("RegisteredOwner");
@@ -333,7 +337,7 @@ namespace ModernWinver
             vals.RAM = GetTotalMemoryInGibibytes();
             vals.RAMType = RamType();
             vals.RAMSpeed = SysInfo("Win32_PhysicalMemory", "Speed");
-            vals.Path = @"C:\Windows";  //(string)CurrentVersionKey.GetValue("PathName");
+            vals.Path = @"C:\Windows";  //(string)CurrentVersionKey.GetValue("PathName"); TODO: find a proper way to get this because im lazy
             vals.FreeSpace = GetTotalFreeSpace();
             vals.Storage = GetTotalSpace();
 
@@ -366,7 +370,7 @@ namespace ModernWinver
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
                     vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "");
-                    if (vals.Edition.Contains("Insider Preview"))
+                    if (vals.Edition.Contains("Insider Preview") && vals.Version != "Dev")
                     {
                         vals.Version = "vNext";
                     }
