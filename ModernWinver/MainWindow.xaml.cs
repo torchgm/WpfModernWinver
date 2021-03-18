@@ -343,6 +343,8 @@ namespace ModernWinver
 
             switch (SysInfo("Win32_Processor", "Architecture"))
             {
+                case null:
+                    vals.Arch = "Real"; break;
                 case "0":
                     vals.Arch = "x86"; break;
                 case "1":
@@ -357,8 +359,10 @@ namespace ModernWinver
                     vals.Arch = "ia64"; break;
                 case "9":
                     vals.Arch = "AMD64"; break;
+                case "12":
+                    vals.Arch = "Probably Apple Silicon"; break;
                 default:
-                    vals.Arch = "Real"; break;
+                    vals.Arch = "Unknown"; break;
             }
 
 
