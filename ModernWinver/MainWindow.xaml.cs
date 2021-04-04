@@ -34,24 +34,35 @@ namespace ModernWinver
         AdvancedPage LoadedAdvancedPage;
         public Values vals = new Values();
         DateTime current = DateTime.Now;
-        string ValuesPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "winver.json");
+        public string ValuesPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "winver.json");
+        string filePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "winver.log");
         bool UpToDate = true;
+        string m = "";
+        public void addLog(string message)
+        {
+            m = $"[{DateTime.Now}] {message}\n";
+            File.AppendAllText(filePath, m);
+        }
 
         public MainWindow()
         {
-
+            File.Create(filePath).Close();
+            addLog("Started!");
             if (!File.Exists(ValuesPath))
             {
                 File.Create(ValuesPath).Close();
                 UpToDate = false;
+                addLog("Created winver.json");
             }
             else
             {
+                addLog("winver.json already exists");
                 string JsonList = File.ReadAllText(ValuesPath);
                 
                 if (JsonList == "")
                 {
                     UpToDate = false;
+
                 }
                 else
                 {
@@ -71,22 +82,26 @@ namespace ModernWinver
             if (UpToDate == false)
             {
                 buttonRefresh_Click(null, null);
-
+                addLog("Initial loading complete");
             }
             else
             {
+                addLog("Creating pages");
                 LoadedAboutPage = new AboutPage();
                 LoadedSystemPage = new SystemPage();
                 LoadedThemePage = new ThemePage();
                 LoadedAdvancedPage = new AdvancedPage();
+                addLog("Page creation complete");
             }
             
             InitializeComponent();
+            addLog("Initialised MAIN");
 
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)
         {
+            addLog("Closing");
             Close();
         }
 
@@ -104,6 +119,7 @@ namespace ModernWinver
             }
             NavView.SelectedItem = NavView.MenuItems[0];
             ContentFrame.Navigate(LoadedAboutPage);
+            addLog("NavView loaded successfully");
         }
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -312,9 +328,11 @@ namespace ModernWinver
 
         private void buttonRefresh_Click(object sender, RoutedEventArgs e)
         {
+            addLog("Refreshing!");
             //refreshProgress.IsActive = true;
             RegistryKey CurrentVersionKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
             RegistryKey CentralProcessorKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+            addLog("RegKeys open");
 
             // Easy stuff
             vals.WeekOfYear = current.DayOfYear / 7;
@@ -328,6 +346,8 @@ namespace ModernWinver
                     vals.Version = "20H2";
                 }
             }
+            addLog("ES set");
+
             vals.Build = (string)CurrentVersionKey.GetValue("CurrentBuild") + "." + CurrentVersionKey.GetValue("UBR").ToString();
             vals.User = (string)CurrentVersionKey.GetValue("RegisteredOwner");
             vals.SystemName = ExecuteCommandSync("hostname").Replace("\r\n", "");
@@ -340,6 +360,7 @@ namespace ModernWinver
             vals.Path = @"C:\Windows";  //(string)CurrentVersionKey.GetValue("PathName"); TODO: find a proper way to get this because im lazy
             vals.FreeSpace = GetTotalFreeSpace();
             vals.Storage = GetTotalSpace();
+            addLog("CS set");
 
             switch (SysInfo("Win32_Processor", "Architecture"))
             {
@@ -361,6 +382,8 @@ namespace ModernWinver
                     vals.Arch = "Real"; break;
             }
 
+            addLog("Arch set");
+
 
             // Get edition of Windows 10 because apparently that's bloody impossible any other way and the registry returns me wrong values
             try
@@ -377,9 +400,11 @@ namespace ModernWinver
                     vals.Edition = vals.Edition.Replace("Insider Preview", "");
 
                 }
+                addLog("WMI success");
             }
             catch (ManagementException ex)
             {
+                addLog("WMI failure");
                 MessageBox.Show("An error occurred while querying for WMI data: " + ex.Message);
             }
 
@@ -388,6 +413,7 @@ namespace ModernWinver
             {
                 vals.User = "(Unknown user)";
             }
+            addLog("UN set");
 
             // If in org, show org name, else show hostname
             if (vals.Workgroup == "" || vals.Workgroup == "org name")
@@ -398,10 +424,12 @@ namespace ModernWinver
             {
                 vals.IsLocal = false;
             }
+            addLog("WG set");
 
             // Writes files
             File.Create(ValuesPath).Close();
             File.WriteAllText(ValuesPath, JsonConvert.SerializeObject(vals, Formatting.Indented));
+            addLog("winver.json written");
 
             // Reloads pages
             LoadedAboutPage = new AboutPage();
@@ -413,7 +441,24 @@ namespace ModernWinver
                 ContentFrame.Navigate(LoadedAboutPage);
                 NavView.SelectedItem = NavView.MenuItems[0];
             }
+            addLog("Pages regenerated");
             //refreshProgress.IsActive = false;
+        }
+
+        private void WindowsLogo_Click(object sender, MouseButtonEventArgs e)
+        {
+
+            if (System.Windows.Input.Keyboard.IsKeyDown(Key.F1))
+            {
+                if (DebugTag.Visibility == Visibility.Hidden)
+                {
+                    DebugTag.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    DebugTag.Visibility = Visibility.Hidden;
+                }
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ namespace ModernWinver
             bwRAM.DoWork += BwRam_DoWork;
             bwRAM.ProgressChanged += BwRam_ProgressChanged;
             bwRAM.RunWorkerAsync();
+            mw.addLog("RAM worker started");
 
             // CPU Background Worker
             BackgroundWorker bwCPU = new BackgroundWorker();
@@ -39,24 +40,30 @@ namespace ModernWinver
             bwCPU.DoWork += BwCpu_DoWork;
             bwCPU.ProgressChanged += BwCpu_ProgressChanged;
             bwCPU.RunWorkerAsync();
+            mw.addLog("CPU worker started");
 
             InitializeComponent();
             valueSystemName.Content = mw.vals.SystemName;
             valueCPU.Content = mw.vals.CPU;
             valueArch.Content = mw.vals.Arch;
-            
+            mw.addLog("Added some CPU details or something");
+
             valueRAM.Content = Math.Round(mw.vals.RAM / GetUnits(mw.vals.RAM).Value, 2).ToString() + $" {GetUnits(mw.vals.RAM).Key} " + mw.vals.RAMType + " @ " + mw.vals.RAMSpeed.ToString() + " MT/s";
             valueMaxRAM.Content = $"{mw.vals.RAM} {GetUnits(mw.vals.RAM).Key}";
             valueZeroRAM.Content = $"0 {GetUnits(mw.vals.RAM).Key}";
+            mw.addLog("More stuff idk what probably RAM");
 
             valuePath.Content = mw.vals.Path;
-            
+            mw.addLog("oh amazing a path >:c");
+
             valueFreeStorage.Content = Math.Round(mw.vals.FreeSpace/GetUnits(mw.vals.FreeSpace).Value, 2).ToString() + $" {GetUnits(mw.vals.FreeSpace).Key} free";
             valueStorage.Content = Math.Round((mw.vals.Storage - mw.vals.FreeSpace) / GetUnits(mw.vals.Storage - mw.vals.FreeSpace).Value, 2).ToString() + $" {GetUnits(mw.vals.Storage - mw.vals.FreeSpace).Key} used";
             valueTotalStorage.Content = Math.Round(mw.vals.Storage / GetUnits(mw.vals.Storage).Value, 2).ToString() + $" {GetUnits(mw.vals.Storage).Key}";
+            mw.addLog("ugh storage too why bother");
 
             double storagePercentage = (mw.vals.FreeSpace / mw.vals.Storage) * 100;
             progressStorage.Value = 100 - ((storagePercentage > 100) ? 100 : storagePercentage);
+            mw.addLog("oh shut up nobody cares about the percentage of storage they've used");
         }
 
 
@@ -110,8 +117,8 @@ namespace ModernWinver
             {
                 return new KeyValuePair<string, double>("MB", 1/1024);
             }
+            mw.addLog("amazing i got some units");
             return new KeyValuePair<string, double>("GB", 1);
-            
         }
     }
 }

@@ -47,17 +47,13 @@ namespace ModernWinver
                 valueWorkgroup.Content = mw.vals.Workgroup;
                 labelWorkgroup.Content = "Workgroup";
             }
+            mw.addLog("Initialised ABOUT");
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());
         }
-
-
-
-
-
 
         private void buttonLaunchSettings_Click(object sender, RoutedEventArgs e)
         {

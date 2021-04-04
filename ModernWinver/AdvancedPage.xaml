@@ -4,11 +4,26 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ModernWinver"
+      xmlns:ui="http://schemas.modernwpf.com/2019"
       mc:Ignorable="d" 
       Title="AdvancedPage" d:DesignWidth="436" d:DesignHeight="400">
 
     <Grid>
-        <Label x:Name="labelTitle" Content="Advanced Information" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
-        <Label x:Name="labelDebug" Content="Unknown text" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="labelTitle" Content="Debug" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="20" Foreground="{DynamicResource SystemBaseHighColorBrush}"/>
+        <Label x:Name="labelDebug" Content="Settings may cause crashes or data loss" Margin="13,33,0,0" Foreground="{DynamicResource SystemBaseMediumColorBrush}" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+        <ui:ToggleSwitch x:Name ="debugToggle0" Height="30" Margin="174,69,0,301" Width="90"/>
+        <Label x:Name="debugLabel0" Content="ForceThemeOverride" HorizontalAlignment="Left" Margin="12,76,0,0" VerticalAlignment="Top" Width="157"/>
+        <ui:ToggleSwitch x:Name ="debugToggle1" Height="30" Margin="174,111,0,259" Width="90"/>
+        <Label x:Name="debugLabel1" Content="ForceColourOverride" HorizontalAlignment="Left" Margin="12,118,0,0" VerticalAlignment="Top" Width="157"/>
+        <ui:ToggleSwitch x:Name ="debugToggle2" Height="30" Margin="174,153,0,217" Width="90"/>
+        <Label x:Name="debugLabel2" Content="DestroyWinverJson" HorizontalAlignment="Left" Margin="12,160,0,0" VerticalAlignment="Top" Width="157"/>
+        <ui:ToggleSwitch x:Name ="debugToggle3" Height="30" Margin="174,195,0,175" Width="90"/>
+        <Label x:Name="debugLabel3" Content="HangUIThread" HorizontalAlignment="Left" Margin="12,202,0,0" VerticalAlignment="Top" Width="157"/>
+        <Button x:Name="applyDebugButton" Content="Apply (dangerous!)" HorizontalAlignment="Left" Margin="275,10,0,0" VerticalAlignment="Top" Width="151" Height="42" Click="applyDebugButton_Click"/>
+        <ui:ToggleSwitch x:Name ="debugToggle4" Height="30" Margin="174,237,0,133" Width="90"/>
+        <Label x:Name="debugLabel4" Content="WriteInvalidRegistry" HorizontalAlignment="Left" Margin="12,244,0,0" VerticalAlignment="Top" Width="157"/>
+        <ui:ProgressRing x:Name ="debugIsResponding" Margin="10,360,396,10" Height="30" Width="30" IsActive="True"/>
+
     </Grid>
 </Page>

@@ -40,21 +40,58 @@ namespace ModernWinver
 
         public ThemePage()
         {
-            InitializeComponent();
-            valueWallpaper.ImageSource = new BitmapImage(new Uri(wallpaperPath, UriKind.Absolute));
-            //SystemParametersInfo(0x0073, )
-            updateSecondaryColourRect();
+            try
+            {
+                mw.addLog("Starting init of theme page because apparently this breaks??");
+                try
+                {
+                    mw.addLog("Trying to initialise page...");
+                    InitializeComponent();
+                    mw.addLog("Success!!");
+                }
+                catch (Exception aaaaaa)
+                {
+                    mw.addLog(aaaaaa.ToString());
+                    throw;
+                }
+                try
+                {
+                    valueWallpaper.ImageSource = new BitmapImage(new Uri(wallpaperPath, UriKind.Absolute));
+                }
+                catch (Exception)
+                {
+                    mw.addLog("EVERYTHING IS ON FIRE AAAAAAAAAAAAAAAAAAAAAAA");
+                }
+                //SystemParametersInfo(0x0073, )
+                updateSecondaryColourRect();
+                mw.addLog("Initialised THEME");
+            }
+            catch (Exception AAAAAAAAAA)
+            {
+                mw.addLog(AAAAAAAAAA.ToString());
+                
+                throw;
+            }
             
         }
 
         private void updateSecondaryColourRect()
         {
-            RegistryKey colourKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Colors");
-            string[] secondaryColour = ((string)colourKey.GetValue("Hilight")).Split(' ');
-            colourKey.Close();
-            RGB rgb = new RGB(Convert.ToByte(secondaryColour[0]), Convert.ToByte(secondaryColour[1]), Convert.ToByte(secondaryColour[2]));
-            textBoxSecondaryAccent.Text = $"#{ColorHelper.ColorConverter.RgbToHex(rgb)}";
-            secondaryRectColour.Color = Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
+            try
+            {
+                RegistryKey colourKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Colors");
+                string[] secondaryColour = ((string)colourKey.GetValue("Hilight")).Split(' ');
+                colourKey.Close();
+                RGB rgb = new RGB(Convert.ToByte(secondaryColour[0]), Convert.ToByte(secondaryColour[1]), Convert.ToByte(secondaryColour[2]));
+                textBoxSecondaryAccent.Text = $"#{ColorHelper.ColorConverter.RgbToHex(rgb)}";
+                secondaryRectColour.Color = Color.FromArgb(255, rgb.R, rgb.G, rgb.B);
+                mw.addLog("USCR complete");
+            }
+            catch (Exception aaaa)
+            {
+                mw.addLog(aaaa.ToString());
+                throw;
+            }
         }
 
         private void buttonUpdateSecondaryAccent_Click(object sender, RoutedEventArgs e)
