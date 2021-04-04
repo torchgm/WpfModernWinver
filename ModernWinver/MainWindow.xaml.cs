@@ -96,7 +96,6 @@ namespace ModernWinver
             
             InitializeComponent();
             addLog("Initialised MAIN");
-
         }
 
         private void buttonOK_Click(object sender, RoutedEventArgs e)
@@ -397,7 +396,7 @@ namespace ModernWinver
                 foreach (ManagementObject queryObj in searcher.Get())
                 {
                     vals.Edition = ((string)queryObj["Caption"]).Replace("Microsoft ", "");
-                    if (vals.Edition.Contains("Insider Preview") && vals.Version != "Dev")
+                    if (vals.Edition.Contains("Insider Preview") && vals.Version == "")
                     {
                         vals.Version = "vNext";
                     }

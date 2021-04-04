@@ -59,9 +59,11 @@ namespace ModernWinver
                 }
             }
 
-            if (debugToggle4.IsOn) // WriteInvalidRegistry
+            if (debugToggle4.IsOn) // ForceUnmanagedResize
             {
                 debugToggle4.IsEnabled = false;
+                mw.Width = 450;
+                mw.Height = 450;
             }
         }
     }
