@@ -380,7 +380,7 @@ namespace ModernWinver
                 case "9":
                     vals.Arch = "AMD64"; break;
                 case "12":
-                    vals.Arch = "Probably Apple Silicon"; break;
+                    vals.Arch = "ARM64"; break;
                 default:
                     vals.Arch = "Unknown"; break;
             }
