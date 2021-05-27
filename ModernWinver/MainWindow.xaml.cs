@@ -184,39 +184,6 @@ namespace ModernWinver
             return Convert.ToInt32(new ComputerInfo().TotalPhysicalMemory / 1073741824) + 1;
         }
 
-        public string ExecuteCommandSync(object command)
-        {
-            try
-            {
-                // create the ProcessStartInfo using "cmd" as the program to be run,
-                // and "/c " as the parameters.
-                // Incidentally, /c tells cmd that we want it to execute the command that follows,
-                // and then exit.
-                ProcessStartInfo procStartInfo =
-                    new ProcessStartInfo("cmd", "/c " + command);
-
-                // The following commands are needed to redirect the standard output.
-                // This means that it will be redirected to the Process.StandardOutput StreamReader.
-                procStartInfo.RedirectStandardOutput = true;
-                procStartInfo.UseShellExecute = false;
-                // Do not create the black window.
-                procStartInfo.CreateNoWindow = true;
-                // Now we create a process, assign its ProcessStartInfo and start it
-                Process proc = new Process();
-                proc.StartInfo = procStartInfo;
-                proc.Start();
-                // Get the output into a string
-                string result = proc.StandardOutput.ReadToEnd();
-                // Display the command output.
-                return result;
-            }
-            catch (Exception e)
-            {
-                // Log the exception
-                return e.ToString();
-            }
-        }
-
         private long GetTotalFreeSpace()
         {
             long tfs = 0;
@@ -349,7 +316,7 @@ namespace ModernWinver
 
             vals.Build = (string)CurrentVersionKey.GetValue("CurrentBuild") + "." + CurrentVersionKey.GetValue("UBR").ToString();
             vals.User = (string)CurrentVersionKey.GetValue("RegisteredOwner");
-            vals.SystemName = ExecuteCommandSync("hostname").Replace("\r\n", "");
+            vals.SystemName = System.Net.Dns.GetHostName();
             vals.Workgroup = (string)CurrentVersionKey.GetValue("RegisteredOrganization");
             vals.CPU = (string)CentralProcessorKey.GetValue("ProcessorNameString");
             vals.Arch = SysInfo("Win32_Processor", "Architecture");
